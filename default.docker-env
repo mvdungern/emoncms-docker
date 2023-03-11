@@ -27,3 +27,10 @@ MQTT_BASETOPIC=emon
 # Feed
 PHPFINA_DIR=/var/opt/emoncms/phpfina/
 PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
+
+# Interface
+MULTI_USER=false
+PASSWORD_RESET=false
+
+# php
+TZ=America/Toronto
