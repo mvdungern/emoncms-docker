@@ -1,17 +1,17 @@
-Docker image for running [emoncms](https://github.com/emoncms/emoncms) on [Unraid](https://unraid.net).
+Docker image for running [emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile learnings. Forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker.
 
-This image assumes you already have the following instances handy: MySQL/MariaDB, Redis and MQTT.
+This image assumes you already have the following instances running: MySQL/MariaDB, Redis and MQTT.
 
 # Quick start
 
-Though this image is meant to be used via the [Unraid app template](https://github.com/mattheworres/docker-templates) you could certainly use it to spin up an instance of emoncms, though it would require running instances of MQTT, Redis and MySQL as well. If this seems like a lot of work, it is. Maybe try the [base emoncms docker image](https://github.com/emoncms/emoncms-docker)?
+Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but will work with many other systems with some fine tuning. Easiest way to spin up a version is to execute teh following under a shell or as a scheduled task.
 
 ```bash
-git clone https://github.com/mattheworres/emoncms-docker
-docker pull mattheworres/emoncms:latest
+docker pull mvdungern/emoncms:latest
 
 docker run -d
     --name emoncms
+    -p 127.0.0.1:80:8998/tcp \
     -v /local/path/to/phpfina:/var/opt/emoncms/phpfina/
     -v /local/path/to/phptimeseries:/var/opt/emoncms/phptimeseries/
     -e MYSQL_HOST=127.0.0.1
@@ -34,7 +34,7 @@ docker run -d
     emoncms
 ```
 
-**That's it! Emoncms should now be running in Docker container, browse to [http://localhost:8080](http://localhost:8080)**
+Emoncms should now be running in Docker container, browse to [http://localhost:8998](http://localhost:8998)**
 
 
 #### Customise config
@@ -50,28 +50,3 @@ Edit `config/php.ini` to add custom php settings e.g. timezone (default `America
 #### Storage
 
 Storage for feed engines e.g. `var/lib/phpfiwa` are mounted as persistent Docker file volumes e.g.`emon-phpfiwa`. Data stored in these folders is persistent if the container is stopped / started but cannot be accessed outside of the container. See below for how to list and remove docker volumes.
-
-## Building the :latest image
-```bash
-cd /this/directory
-docker build -t mattheworres/emoncms:latest .
-```
-
-## Pushing to docker hub 
-
-From: https://docs.docker.com/docker-hub/repos/
-
-```bash
-docker login --username=yourhubusername --email=youremail@company.com
-docker tag mattheworres/emoncms:latest mattheworres/emoncms:<tag-name>
-docker push mattheworres/emoncms:<tag-name>
-```
-
-Tag name should be the Emoncms version e.g 11.x.x
-
-Also push the latest version using `latest` tag
-
-```bash
-docker tag mattheworres/emoncms:<latest-version>
-docker tag mattheworres/emoncms:latest
-```
