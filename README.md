@@ -33,7 +33,6 @@ docker run -d \
     -e MQTT_BASETOPIC=emon \
     -e PHPFINA_DIR=/var/opt/emoncms/phpfina/ \
     -e PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/ \
-    -e EMONCMS_DOMAIN=false \ 
     mattheworres/emoncms
 ```
 
