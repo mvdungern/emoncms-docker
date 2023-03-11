@@ -4,7 +4,7 @@ This image assumes you already have the following instances running: MySQL/Maria
 
 # Quick start
 
-Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but will work with many other systems with some fine tuning. Easiest way to spin up a version is to execute teh following under a shell or as a scheduled task.
+Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but will work with many other systems with some fine tuning. Easiest way to spin up a version is to execute teh following under a shell or as a scheduled task script.
 
 ```bash
 docker pull mvdungern/emoncms:latest
