@@ -1,10 +1,12 @@
-Docker image for running [emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile/github learnings. Forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker.
+Docker image for running [emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile/github learnings. Used mostly with an Iotawatt device.
+
+Originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker.
 
 This image assumes you already have the following instances running: MySQL/MariaDB, Redis, and MQTT.
 
 # Quick start
 
-Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but will work with many other systems with some fine tuning. Easiest way to spin up a version is to execute the following under a shell or as a scheduled task script.
+Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but should work with many other systems with some fine tuning.
 
 The following Enviroment Settings are exposed during creation
 
@@ -16,21 +18,21 @@ The following Enviroment Settings are exposed during creation
 |MYSQL_PORT| MySQL/MariaDB Port| 3306 |
 |MYSQL_USER| Username of Emoncms | emoncms |
 |MYSQL_PASSWORD| MYSQL/MariaDB Password | YOUR_SECURE_PASSWORD |
-|MYSQL_RANDOM_ROOT_PASSWORD| Generate a random root password for MySQL/MARIADB | yes |
-|MYSQL_INITDB_SKIP_TZINFO| Ignore TZ info | true |
+|MYSQL_RANDOM_ROOT_PASSWORD| Generate a random root password for MySQL/MariaDB | yes |
+|MYSQL_INITDB_SKIP_TZINFO| Ignore TZ info in MySQL | true |
 |REDIS_ENABLED| Enable Redis support (required) |true|
 |REDIS_HOST| Redis Host | 127.0.0.1 |
 |REDIS_PORT| Redis Port | 6379 |
 |REDIS_PREFIX| Prefix attached to Redis |emoncms|
-|MQTT_ENABLED| Enable MQTT Support (required) |true|
+|MQTT_ENABLED| Enable MQTT Support (required if using OpenEnergyMonitor devices) |true|
 |MQTT_HOST| MQTT Host |localhost|
 |MQTT_USER| MQTT Username |YOUR_MQTT_USER|
 |MQTT_PASSWORD| MQTT Password |YOUR_MQTT_PASSWORD|
 |MQTT_BASETOPIC| MQTT Topic |emon|
 |PHPFINA_DIR| phpFina inside dockerfile|/var/opt/emoncms/phpfina/|
 |PHPTIMESERIES_DIR|phpTimeseries inside dockerfile|/var/opt/emoncms/phptimeseries/|
-|MULTI_USER|Enable multiuser in EmonCMS|false|
-|PASSWORD_RESET|Allow users to reset their own passwords|false|
+|MULTI_USER|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS|false|
+|PASSWORD_RESET|Allows users to reset their own passwords|false|
 |TZ| Timezone | America/Toronto |
 
 Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
@@ -40,7 +42,7 @@ Two feed volumes are also capable to being set to persistant to survive docker u
 
 Default Port is 80, recommend setting to something else (ie 8998) in order to not interfere with other containers.
 
-To create from a terminal:
+Easiest way to spin up an instance is to execute the following under a shell or as a scheduled task script.
 
 ```bash
 docker pull mvdungern/emoncms:latest
