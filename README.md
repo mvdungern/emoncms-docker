@@ -10,30 +10,28 @@ Though this image is meant to be used via the [Unraid app template](https://gith
 git clone https://github.com/mattheworres/emoncms-docker
 docker pull mattheworres/emoncms:latest
 
-docker run -d \
-    --name emoncms \
-    -p 127.0.0.1:80:8080/tcp \
-    -v /local/path/to/phpfina:/var/opt/emoncms/phpfina/ \
-    -v /local/path/to/phptimeseries:/var/opt/emoncms/phptimeseries/ \
-    -e MYSQL_HOST=127.0.0.1 \
-    -e MYSQL_PORT=3306 \
-    -e MYSQL_USER=emoncms \
-    -e MYSQL_PASSWORD=my_secure_password \
-    -e MYSQL_DATABASE=emoncms \
-    -e MYSQL_RANDOM_ROOT_PASSWORD=yes \
-    -e REDIS_HOST=127.0.0.1 \
-    -e REDIS_ENABLED=yes \
-    -e REDIS_PORT=6379 \
-    -e REDIS_PREFIX='emoncms' \
-    -e MQTT_ENABLED=yes \
-    -e MQTT_HOST=127.0.0.1 \
-    -e MQTT_PORT=1883 \
-    -e MQTT_USER=emoncms \
-    -e MQTT_PASSWORD=my_secure_password \
-    -e MQTT_BASETOPIC=emon \
-    -e PHPFINA_DIR=/var/opt/emoncms/phpfina/ \
-    -e PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/ \
-    mattheworres/emoncms
+docker run -d
+    --name emoncms
+    -v /local/path/to/phpfina:/var/opt/emoncms/phpfina/
+    -v /local/path/to/phptimeseries:/var/opt/emoncms/phptimeseries/
+    -e MYSQL_HOST=127.0.0.1
+    -e MYSQL_PORT=3306
+    -e MYSQL_USER=emoncms
+    -e MYSQL_PASSWORD=my_secure_password
+    -e MYSQL_DATABASE=emoncms
+    -e MYSQL_RANDOM_ROOT_PASSWORD=yes
+    -e REDIS_ENABLED=yes
+    -e REDIS_PORT=6379
+    -e REDIS_PREFIX='emoncms'
+    -e MQTT_ENABLED=yes
+    -e MQTT_HOST=127.0.0.1
+    -e MQTT_PORT=1883
+    -e MQTT_USER=emoncms
+    -e MQTT_PASSWORD=my_secure_password
+    -e MQTT_BASETOPIC=emon
+    -e PHPFINA_DIR=/var/opt/emoncms/phpfina/
+    -e PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
+    emoncms
 ```
 
 **That's it! Emoncms should now be running in Docker container, browse to [http://localhost:8080](http://localhost:8080)**

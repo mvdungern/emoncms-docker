@@ -1,15 +1,17 @@
 # Offical Docker PHP & Apache image https://hub.docker.com/_/php/
-FROM php:8.2-apache
+FROM php:7.4-apache
 
 # Install deps
 RUN apt-get update && apt-get install -y \
+              libcurl4-gnutls-dev \
+              libmcrypt-dev \
+              libmosquitto-dev \
               gettext \
-              libcurl4-openssl-dev \
+              nano \
               git-core
 
-
 # Enable PHP modules
-RUN docker-php-ext-install -j$(nproc) mysqli gettext
+RUN docker-php-ext-install -j$(nproc) mysqli curl json gettext
 RUN pecl install redis \
     \ && docker-php-ext-enable redis
 # Keeping this here, just in case it's required for interacting with MQTT
