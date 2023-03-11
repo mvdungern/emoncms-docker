@@ -7,8 +7,6 @@ This image assumes you already have the following instances running: MySQL/Maria
 Image works with the excellent [Marius Hosting](https://mariushosting.com/docker/) docker images for Synology, but will work with many other systems with some fine tuning. Easiest way to spin up a version is to execute teh following under a shell or as a scheduled task script.
 
 ```bash
-docker pull mvdungern/emoncms:latest
-
 docker run -d
     --name emoncms
     -p 127.0.0.1:80:8998/tcp \
@@ -31,7 +29,7 @@ docker run -d
     -e MQTT_BASETOPIC=emon
     -e PHPFINA_DIR=/var/opt/emoncms/phpfina/
     -e PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
-    emoncms
+    ghcr.io/mvdungern/emoncms:latest
 ```
 
 Emoncms should now be running in Docker container, browse to [http://localhost:8998](http://localhost:8998)**
