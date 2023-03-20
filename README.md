@@ -15,7 +15,7 @@ The following Enviroment Settings are exposed during creation
 
 | Setting | Function | Default |
 | :----: | --- | --- |
-|`EMONCMS_DOMAIN`| Default domain of Emoncms, for security |false|
+|`EMONCMS_DOMAIN`| Default domain of Emoncms, for security |`false`|
 |`MYSQL_HOST`| Host of MySQL/Maria | `127.0.0.1` |
 |`MYSQL_PORT`| MySQL/MariaDB Port| `3306` |
 |`MYSQL_USER`| Username of Emoncms | `emoncms` |
