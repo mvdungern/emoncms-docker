@@ -8,12 +8,14 @@ RUN apt-get update && apt-get install -y \
               libmosquitto-dev \
               gettext \
               nano \
-              git-core
+              git-core \ 
+              wget
 
 # Enable PHP modules
 RUN docker-php-ext-install -j$(nproc) mysqli curl json gettext
 RUN pecl install redis \
     \ && docker-php-ext-enable redis
+    
 # Keeping this here, just in case it's required for interacting with MQTT
 # RUN pecl install Mosquitto-beta \
 #     \ && docker-php-ext-enable mosquitto
@@ -28,9 +30,10 @@ COPY config/apache.emoncms.conf /etc/apache2/sites-available/emoncms.conf
 RUN a2dissite 000-default.conf
 RUN a2ensite emoncms
 
-# Clone in master Emoncms repo & modules - overwritten in development with local FS files
+# Clone in stable Emoncms repo & modules - overwritten in development with local FS files
 RUN mkdir /var/www/emoncms
-RUN git clone https://github.com/emoncms/emoncms.git /var/www/emoncms
+# RUN git clone https://github.com/emoncms/emoncms.git /var/www/emoncms
+RUN wget -c https://github.com/emoncms/emoncms/archive/refs/tags/11.3.0.tar.gz -O - | tar -xz --strip-components=1 -C /var/www/emoncms
 RUN git clone https://github.com/emoncms/dashboard.git /var/www/emoncms/Modules/dashboard
 RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/graph
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app
