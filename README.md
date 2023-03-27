@@ -1,14 +1,14 @@
 # About
 
-Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile/github learnings. Used mostly with an Iotawatt device, any feedback on other compatible devices would be appreciated.
+Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile/github learnings. Used mostly with an Iotawatt device, any feedback on other compatible devices would be appreciated. 
 
-Originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker - if using Unraid definitely start there
+This image was originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker - if using Unraid definitely start there as a template is provided.
 
-This image assumes you already have the following instances running and properly configured: MySQL or MariaDB, Redis, and MQTT.
+The image assumes you already have the following instances running and properly configured if desired: MySQL or MariaDB (required), Redis (optional but recommended), and MQTT (only required if using devices requiring it).
 
 # Quick start
 
-Image was designed to work wth the examples on [Marius Hosting](https://mariushosting.com/docker/) for a Synology NAS, but should work elsewhere with some fine tuning.
+Image works well with the docker setups given by [Marius Hosting](https://mariushosting.com/docker/) for use on a Synology NAS, but should work elsewhere.
 
 The following Enviroment Settings are exposed during creation
 
@@ -37,14 +37,18 @@ The following Enviroment Settings are exposed during creation
 |`PASSWORD_RESET`|Allows users to reset their own passwords|`false`|
 |`TZ`| Timezone | `America/Toronto` |
 
+As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release
+
 Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
 
-* /var/opt/emoncms/phpfina/
-* /var/opt/emoncms/phptimeseries/
+* `/var/opt/emoncms/phpfina/`
+* `/var/opt/emoncms/phptimeseries/`
 
-Default Port is 80, recommend setting to something else (ie 8998) in order to not interfere with other containers.
+Default Port is 80, recommend setting to something else in order to not interfere with other containers.
 
-Easiest way to spin up an instance is to execute the following under a shell or as a scheduled task script.
+Versions are tagged to a version number with an internal release number attached (ie `11.3.0-0`) with the `latest` tag tracking the latest stable release. A `master` tag will be produced at the same time tracking the latest source code revisions but this would be a *very* YMMV and should be avoided unless required.
+
+The easiest way to spin up an instance is to execute the following under a shell or as a scheduled task script in Control Panel / Task Scheduler on a Synology.
 
 ```bash
 docker pull mvdungern/emoncms:latest
