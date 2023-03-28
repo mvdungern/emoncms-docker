@@ -4,6 +4,9 @@ FROM php:8.1-apache
 # Set ARG for build version
 ARG VERSION=stable
 
+# Hardcoded variable for Emoncms domain, enable for security if required 
+ENV EMONCMS_DOMAIN=false
+
 # Set mySQL ENVs
 ENV MYSQL_HOST=127.0.0.1
 ENV MYSQL_PORT=3306
@@ -46,8 +49,7 @@ RUN apt-get update && apt-get install -y \
               libmosquitto-dev \
               gettext \
               nano \
-              git-core \ 
-              wget
+              git-core
 
 # Enable PHP modules
 RUN docker-php-ext-install -j$(nproc) mysqli gettext
@@ -75,10 +77,11 @@ RUN if [ "$VERSION" = "master" ]; then \
     git clone https://github.com/emoncms/emoncms.git /var/www/emoncms \
     && echo "building from master"; \
   else \
-    wget -c https://github.com/emoncms/emoncms/archive/refs/tags/11.3.0.tar.gz -O - | tar -xz --strip-components=1 -C /var/www/emoncms \
+    git clone --single-branch --branch stable https://github.com/emoncms/emoncms.git /var/www/emoncms \
     && echo "building 11.3.0 stable"; \
   fi
-RUN wget -c https://github.com/emoncms/emoncms/archive/refs/tags/11.3.0.tar.gz -O - | tar -xz --strip-components=1 -C /var/www/emoncms
+# Commment old tar.gz pull to grab stable tree instead
+# wget -c https://github.com/emoncms/emoncms/archive/refs/tags/11.3.0.tar.gz -O - | tar -xz --strip-components=1 -C /var/www/emoncms \
 RUN git clone https://github.com/emoncms/dashboard.git /var/www/emoncms/Modules/dashboard
 RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/graph
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app

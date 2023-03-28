@@ -18,26 +18,27 @@ The following Enviroment Settings are exposed during creation
 |`EMONCMS_DOMAIN`| Default domain of Emoncms, for security |`false`|
 |`MYSQL_HOST`| Host of MySQL/Maria | `127.0.0.1` |
 |`MYSQL_PORT`| MySQL/MariaDB Port| `3306` |
+|`MYSQL_DATABASE`| Name of database inside MySQL/MariaDB |`emoncms`|
 |`MYSQL_USER`| Username of Emoncms | `emoncms` |
 |`MYSQL_PASSWORD`| MYSQL/MariaDB Password | `YOUR_SECURE_PASSWORD` |
 |`MYSQL_RANDOM_ROOT_PASSWORD`| Generate a random root password for MySQL/MariaDB | `yes` |
 |`MYSQL_INITDB_SKIP_TZINFO`| Ignore TZ info in MySQL | `true` |
-|`REDIS_ENABLED`| Enable Redis support (required) |`true`|
+|`REDIS_ENABLED`| Enable Redis support (recommended) |`true`|
 |`REDIS_HOST`| Redis Host | `127.0.0.1` |
 |`REDIS_PORT`| Redis Port | `6379` |
 |`REDIS_PREFIX`| Prefix attached to Redis |`emoncms`|
-|`MQTT_ENABLED`| Enable MQTT Support (required if using OpenEnergyMonitor devices) |`true`|
+|`MQTT_ENABLED`| Enable MQTT Support (required only if using OpenEnergyMonitor devices) |`true`|
 |`MQTT_HOST`| MQTT Host |`localhost`|
 |`MQTT_USER`| MQTT Username |`YOUR_MQTT_USER`|
 |`MQTT_PASSWORD`| MQTT Password |`YOUR_MQTT_PASSWORD`|
 |`MQTT_BASETOPIC`| MQTT Topic |`emon`|
-|`PHPFINA_DIR`| phpFina inside dockerfile|`/var/opt/emoncms/phpfina/`|
-|`PHPTIMESERIES_DIR`|phpTimeseries inside dockerfile|`/var/opt/emoncms/phptimeseries/`|
+|`PHPFINA_DIR`| phpFina directory inside dockerfile|`/var/opt/emoncms/phpfina/`|
+|`PHPTIMESERIES_DIR`|phpTimeseries directory inside dockerfile|`/var/opt/emoncms/phptimeseries/`|
 |`MULTI_USER`|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS|`false`|
 |`PASSWORD_RESET`|Allows users to reset their own passwords|`false`|
 |`TZ`| Timezone | `America/Toronto` |
 
-As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release
+As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release. All  modules are grabbed as master source regardless of version due to their slower development pace vs. the master course.
 
 Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
 
@@ -51,7 +52,7 @@ Versions are tagged to a version number with an internal release number attached
 The easiest way to spin up an instance is to execute the following under a shell or as a scheduled task script in Control Panel / Task Scheduler on a Synology.
 
 ```bash
-docker pull mvdungern/emoncms:latest
+docker pull ghcr.io/mvdungern/emoncms-docker:latest
 
 docker run -d \
     --name emoncms \
