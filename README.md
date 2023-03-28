@@ -81,5 +81,5 @@ docker run -d \
     -e MULTI_USER=false
     -e PASSWORD_RESET=false
     -e TZ=YOUR/TIMEZONE
-    mvdungern/emoncms
+    mvdungern/emoncms-docker
 ```
