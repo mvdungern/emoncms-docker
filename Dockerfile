@@ -4,7 +4,7 @@ FROM php:8.1-apache
 # Set ARG for build version
 ARG VERSION=stable
 
-# Hardcoded variable for Emoncms domain, enable for security if required 
+# Variable for Emoncms domain host, enable for additional security if required 
 ENV EMONCMS_DOMAIN=false
 
 # Set mySQL ENVs
@@ -27,14 +27,16 @@ ENV REDIS_PREFIX='emoncms'
 # Set MQTT ENVs
 ENV MQTT_ENABLED=true
 ENV MQTT_HOST='localhost'
+ENV MQTT_PORT=1883
 ENV MQTT_USER=YOUR_MQTT_USER
 ENV MQTT_PASSWORD=YOUR_MQTT_PASSWORD
 ENV MQTT_BASETOPIC='emon'
+ENV MQTT_CLIENT='emoncms'
 
 
-# Set feed engine ENVs
-ENV PHPFINA_DIR=/var/opt/emoncms/phpfina/
-ENV PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
+# Set feed engine ENVs, shouldn't be required
+# ENV PHPFINA_DIR=/var/opt/emoncms/phpfina/
+# ENV PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
 
 # Set Emoncms interface option ENVs
 ENV MULTI_USER=false
@@ -73,15 +75,19 @@ RUN a2ensite emoncms
 # Clone in stable Emoncms repo & modules - overwritten in development with local FS files. Use stable repo unless build-arg set to master
 
 RUN mkdir /var/www/emoncms
-RUN if [ "$VERSION" = "master" ]; then \
-    git clone https://github.com/emoncms/emoncms.git /var/www/emoncms \
-    && echo "building from master"; \
+
+# Pull from stable or master branch based on VERSION build ARG and echo the decision
+
+RUN if [ ${VERSION} = "master" ]; then \
+    git clone https://github.com/emoncms/emoncms.git /var/www/emoncms ; \
   else \
-    git clone --single-branch --branch stable https://github.com/emoncms/emoncms.git /var/www/emoncms \
-    && echo "building 11.3.0 stable"; \
+    git clone --single-branch --branch stable https://github.com/emoncms/emoncms.git /var/www/emoncms ; \
   fi
+RUN echo "Building from ${VERSION} branch"
+
 # Commment old tar.gz pull to grab stable tree instead
 # wget -c https://github.com/emoncms/emoncms/archive/refs/tags/11.3.0.tar.gz -O - | tar -xz --strip-components=1 -C /var/www/emoncms \
+
 RUN git clone https://github.com/emoncms/dashboard.git /var/www/emoncms/Modules/dashboard
 RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/graph
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app

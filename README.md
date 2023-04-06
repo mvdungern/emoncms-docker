@@ -29,11 +29,11 @@ The following Enviroment Settings are exposed during creation
 |`REDIS_PREFIX`| Prefix attached to Redis |`emoncms`|
 |`MQTT_ENABLED`| Enable MQTT Support (required only if using OpenEnergyMonitor devices) |`true`|
 |`MQTT_HOST`| MQTT Host |`localhost`|
+|`MQTT_PORT`| MQTT Port | `1883` |
 |`MQTT_USER`| MQTT Username |`YOUR_MQTT_USER`|
 |`MQTT_PASSWORD`| MQTT Password |`YOUR_MQTT_PASSWORD`|
 |`MQTT_BASETOPIC`| MQTT Topic |`emon`|
-|`PHPFINA_DIR`| phpFina directory inside dockerfile|`/var/opt/emoncms/phpfina/`|
-|`PHPTIMESERIES_DIR`|phpTimeseries directory inside dockerfile|`/var/opt/emoncms/phptimeseries/`|
+|`MQTT_CLIENT`| MQTT Client ID | `emoncms` |
 |`MULTI_USER`|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS|`false`|
 |`PASSWORD_RESET`|Allows users to reset their own passwords|`false`|
 |`TZ`| Timezone | `America/Toronto` |
@@ -76,10 +76,9 @@ docker run -d \
     -e MQTT_USER=emoncms \
     -e MQTT_PASSWORD=my_secure_password \
     -e MQTT_BASETOPIC=emon \
-    -e PHPFINA_DIR=/var/opt/emoncms/phpfina/ \
-    -e PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/ \
-    -e MULTI_USER=false
-    -e PASSWORD_RESET=false
-    -e TZ=YOUR/TIMEZONE
+    -e MQTT_CLIENT=emoncms \
+    -e MULTI_USER=false \
+    -e PASSWORD_RESET=false \
+    -e TZ=YOUR/TIMEZONE \
     ghcr.io/mvdungern/emoncms-docker
 ```
