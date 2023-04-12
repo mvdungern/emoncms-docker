@@ -39,7 +39,9 @@ The following Enviroment Settings are exposed during creation
 |`TZ`| Timezone | `America/Toronto` |
 |`LOG_LEVEL`| Sets the logging level with 1=INFO, 2=WARN, 3=ERROR | `2` |
 
-As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release. All  modules are grabbed as master source regardless of version due to their slower development pace vs. the master course.
+As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release. ARGs exist as well for both `phpredis/phpredis` as `EXT_REDIS_VERSION` and `nismoryco/Mosquitto-PHP` as `EXT_MOSQUITTO_VERSION`.
+
+All modules are grabbed as master source regardless of version due to their slower development pace vs. the master course.
 
 Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
 

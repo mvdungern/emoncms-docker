@@ -4,6 +4,10 @@ FROM php:8.1-apache
 # Set ARG for build version
 ARG VERSION=stable
 
+# Set PHP extension versions to allow finer control of versions selected during build, mosquitto being grabbed from a fork so we'll use the current git
+ARG EXT_REDIS_VERSION=5.3.7
+ARG EXT_MOSQUITTO_VERSION=1.8.0
+
 # Variable for Emoncms domain host, enable for additional security if required 
 ENV EMONCMS_DOMAIN=false
 
@@ -43,18 +47,14 @@ ENV LOG_LEVEL=2
 # Set Timezone ENV
 ENV TZ=America/Toronto
 
-# Set PHP extension versions to allow finer control of versions selected during build, mosquitto being grabbed from a fork so we'll use the current git
-ENV EXT_REDIS_VERSION=5.3.7
-ENV EXT_MOSQUITTO_VERSION=1.8.0
-
 # Install deps
 RUN apt-get update && apt-get install -y \
               libcurl4-openssl-dev \
               libmosquitto-dev \
               gettext \
               nano \
+              sysstat \
               git-core
-
 
 # Enable PHP modules
 RUN docker-php-ext-install -j$(nproc) mysqli gettext
@@ -87,6 +87,9 @@ RUN a2enmod rewrite
 
 # Add custom PHP config
 COPY config/php.ini /usr/local/etc/php/
+
+# Add systemctl replacement
+COPY files/docker/systemctl.py /usr/bin/systemctl
 
 # Add custom Apache config
 COPY config/apache.emoncms.conf /etc/apache2/sites-available/emoncms.conf
