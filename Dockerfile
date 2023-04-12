@@ -33,17 +33,19 @@ ENV MQTT_PASSWORD=YOUR_MQTT_PASSWORD
 ENV MQTT_BASETOPIC='emon'
 ENV MQTT_CLIENT='emoncms'
 
-
-# Set feed engine ENVs, shouldn't be required
-# ENV PHPFINA_DIR=/var/opt/emoncms/phpfina/
-# ENV PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/
-
 # Set Emoncms interface option ENVs
 ENV MULTI_USER=false
 ENV PASSWORD_RESET=false
 
+#Set Emoncms logging level, usful during debugging
+ENV LOG_LEVEL=2
+
 # Set Timezone ENV
 ENV TZ=America/Toronto
+
+# Set PHP extension versions to allow finer control of versions selected during build, mosquitto being grabbed from a fork so we'll use the current git
+ENV EXT_REDIS_VERSION=5.3.7
+ENV EXT_MOSQUITTO_VERSION=1.8.0
 
 # Install deps
 RUN apt-get update && apt-get install -y \
@@ -53,12 +55,31 @@ RUN apt-get update && apt-get install -y \
               nano \
               git-core
 
+
 # Enable PHP modules
 RUN docker-php-ext-install -j$(nproc) mysqli gettext
-RUN pecl install redis \
-    \ && docker-php-ext-enable redis
-    
-# Mosquitto appears to be broken; removing PHP support until fixed
+
+# RUN docker-php-source extract &&\
+#    docker-php-ext-get redis ${EXT_REDIS_VERSION} &&\
+#    docker-php-ext-install redis
+
+RUN docker-php-source extract \
+    # grab and install nismoryco/Mosquitto-PHP fork; mgdm/Mosquitto-PHP appears to be abondonware and doesn't support PHP 8.x
+    && mkdir -p /usr/src/php/ext/ \
+    && mkdir /usr/src/php/mosquitto-php \
+    && git clone https://github.com/nismoryco/Mosquitto-PHP.git /usr/src/php/ext/mosquitto-php \
+    && docker-php-ext-install mosquitto-php \
+    # grab and install redis
+    && mkdir -p /usr/src/php/ext/redis \
+    && curl -fsSL https://github.com/phpredis/phpredis/archive/${EXT_REDIS_VERSION}.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
+    && docker-php-ext-install redis \
+    && docker-php-source delete
+
+# Removing pecl installation, building from source
+# RUN pecl install redis \
+#    \ && docker-php-ext-enable redis
+
+# Mosquitto pecl doesn't support PHP 8+
 # RUN pecl install Mosquitto-beta \
 #     \ && docker-php-ext-enable mosquitto
 

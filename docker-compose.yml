@@ -1,0 +1,36 @@
+version: '3'
+services:
+  emoncms:
+    image: mvdungern/emoncms:latest
+    container_name: emoncms
+    ports:
+      - 'yourport:80'
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - EMONCMS_DOMAIN=false
+      - MYSQL_HOST=127.0.0.1 
+      - MYSQL_PORT=3306 
+      - MYSQL_USER=emoncms 
+      - MYSQL_PASSWORD=my_secure_password 
+      - MYSQL_DATABASE=emoncms 
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes 
+      - REDIS_HOST=127.0.0.1 
+      - REDIS_ENABLED=yes 
+      - REDIS_PORT=6379 
+      - REDIS_PREFIX='emoncms' 
+      - MQTT_ENABLED=yes 
+      - MQTT_HOST=127.0.0.1 
+      - MQTT_PORT=1883 
+      - MQTT_USER=emoncms 
+      - MQTT_PASSWORD=my_secure_password 
+      - MQTT_BASETOPIC=emon 
+      - MQTT_CLIENT=emoncms 
+      - MULTI_USER=false 
+      - PASSWORD_RESET=false 
+      - TZ=YOUR/TIMEZONE 
+      - LOG_LEVEL=2
+    volumes:
+      - /local/path/to/phpfina:/var/opt/emoncms/phpfina/ 
+      - /local/path/to/phptimeseries:/var/opt/emoncms/phptimeseries/ 
+    restart: unless-stopped

@@ -37,6 +37,7 @@ The following Enviroment Settings are exposed during creation
 |`MULTI_USER`|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS|`false`|
 |`PASSWORD_RESET`|Allows users to reset their own passwords|`false`|
 |`TZ`| Timezone | `America/Toronto` |
+|`LOG_LEVEL`| Sets the logging level with 1=INFO, 2=WARN, 3=ERROR | `2` |
 
 As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release. All  modules are grabbed as master source regardless of version due to their slower development pace vs. the master course.
 
@@ -47,12 +48,12 @@ Two feed volumes are also capable to being set to persistant to survive docker u
 
 Default Port is 80, recommend setting to something else in order to not interfere with other containers.
 
-Versions are tagged to a version number with an internal release number attached (ie `11.3.0-0`) with the `latest` tag tracking the latest stable release. A `master` tag will be produced at the same time tracking the latest source code revisions but this would be a *very* YMMV and should be avoided unless required.
+Versions are tagged to a version number with an internal release number attached (ie `11.3.0-3`) with the `latest` tag tracking the latest stable release. A `master` tag will be produced at the same time tracking the latest source code revisions but this would be a *very* YMMV and should be avoided unless required.
 
-The easiest way to spin up an instance is to execute the following under a shell or as a scheduled task script in Control Panel / Task Scheduler on a Synology.
+The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml
 
 ```bash
-docker pull ghcr.io/mvdungern/emoncms-docker:latest
+docker pull mvdungern/emoncms:latest
 
 docker run -d \
     --name emoncms \
@@ -80,5 +81,6 @@ docker run -d \
     -e MULTI_USER=false \
     -e PASSWORD_RESET=false \
     -e TZ=YOUR/TIMEZONE \
-    ghcr.io/mvdungern/emoncms-docker
+    -e LOG_LEVEL=2 \
+    mvdungern/emoncms
 ```
