@@ -87,7 +87,7 @@ RUN docker-php-source extract \
 RUN a2enmod rewrite
 
 # Add custom PHP config
-COPY config/php.ini /usr/local/etc/php/
+COPY config/php.ini /usr/local/etc/php/php.ini
 
 # Add custom Apache config
 COPY config/apache.emoncms.conf /etc/apache2/sites-available/emoncms.conf
@@ -120,7 +120,6 @@ RUN git clone https://github.com/emoncms/device.git /var/www/emoncms/Modules/dev
 RUN git config --global --add safe.directory /var/www/emoncms
 RUN git config --global --add safe.directory '*'
 
-
 # Add custom emoncms config
 COPY config/emoncms.settings.ini /var/www/emoncms/settings.ini
 
@@ -136,7 +135,7 @@ RUN mkdir /var/log/emoncms
 RUN touch /var/log/emoncms/emoncms.log
 RUN chmod 666 /var/log/emoncms/emoncms.log
 
-# To start Apache and emoncms_mqtt from supervisord; from jamesfidell push to the offical emoncms-docker repo
+# To start Apache and emoncms_mqtt from supervisord; from jamesfidells push to the offical emoncms-docker repo but fixed to prevent "Error: positional arguments are not supported"
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 COPY config/runsupervisord.sh /usr/local/runsupervisord.sh
 ENTRYPOINT [ "bash", "/usr/local/runsupervisord.sh" ]

@@ -1,6 +1,6 @@
 # About
 
-Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very much a work in progress built for my own dockerfile/github learnings. Used mostly with an Iotawatt device, any feedback on other compatible devices would be appreciated. 
+Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very much a work in progress (but it does work!) built for my own dockerfile/github learnings. Used mostly with an Iotawatt device, any feedback on other compatible devices would be appreciated; MQTT does work in this container - feedback would be appreciated. 
 
 This image was originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker - if using Unraid definitely start there as a template is provided.
 
@@ -8,10 +8,7 @@ The image assumes you already have the following instances running and properly 
 
 # Quick start
 
-Image works well with the docker setups given by [Marius Hosting](https://mariushosting.com/docker/) for use on a Synology NAS, but should work elsewhere.
-
 The following Enviroment Settings are exposed during creation
-
 
 | Setting | Function | Default |
 | :----: | --- | --- |
@@ -41,7 +38,7 @@ The following Enviroment Settings are exposed during creation
 
 As well as presenting a build ARG `VERSION`, if set to `master` this will pull the Emoncms master source as it currently exists; otherwise will grab the latest stable release. ARGs exist as well for both `phpredis/phpredis` as `EXT_REDIS_VERSION` and `nismoryco/Mosquitto-PHP` as `EXT_MOSQUITTO_VERSION`.
 
-All modules are grabbed as master source regardless of version due to their slower development pace vs. the master course.
+All modules are grabbed as master source regardless of version due to their slower development pace vs. the main emoncms program.
 
 Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
 
@@ -50,9 +47,13 @@ Two feed volumes are also capable to being set to persistant to survive docker u
 
 Default Port is 80, recommend setting to something else in order to not interfere with other containers.
 
+Supervisor logs are kept in /var/log/supervisor - logs exist for apache and emoncms_mqtt as well as the main supervisor log.
+
 Versions are tagged to a version number with an internal release number attached (ie `11.3.0-3`) with the `latest` tag tracking the latest stable release. A `master` tag will be produced at the same time tracking the latest source code revisions but this would be a *very* YMMV and should be avoided unless required.
 
 The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml
+
+Primary repository for packages remains at dockerhub as I haven't figured out a way to get Github packages built and pushed cleanly with my workflow as of yet.
 
 ```bash
 docker pull mvdungern/emoncms:latest
