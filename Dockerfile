@@ -54,7 +54,8 @@ RUN apt-get update && apt-get install -y \
               gettext \
               nano \
               sysstat \
-              git-core
+              git-core \
+              supervisor
 
 # Enable PHP modules
 RUN docker-php-ext-install -j$(nproc) mysqli gettext
@@ -79,7 +80,7 @@ RUN docker-php-source extract \
 # RUN pecl install redis \
 #    \ && docker-php-ext-enable redis
 
-# Mosquitto pecl doesn't support PHP 8+
+# Mosquitto pecl doesn't support PHP 8+, swapped to nismoryco fork
 # RUN pecl install Mosquitto-beta \
 #     \ && docker-php-ext-enable mosquitto
 
@@ -87,9 +88,6 @@ RUN a2enmod rewrite
 
 # Add custom PHP config
 COPY config/php.ini /usr/local/etc/php/
-
-# Add systemctl replacement
-COPY files/docker/systemctl.py /usr/bin/systemctl
 
 # Add custom Apache config
 COPY config/apache.emoncms.conf /etc/apache2/sites-available/emoncms.conf
@@ -117,8 +115,14 @@ RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/grap
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app
 RUN git clone https://github.com/emoncms/device.git /var/www/emoncms/Modules/device
 
+# Make the default directory 'safe' for git, cleans up the dubious ownership issue
+
+RUN git config --global --add safe.directory /var/www/emoncms
+RUN git config --global --add safe.directory '*'
+
+
 # Add custom emoncms config
-COPY docker.settings.ini /var/www/emoncms/settings.ini
+COPY config/emoncms.settings.ini /var/www/emoncms/settings.ini
 
 # Create folders & set permissions for feed-engine data folders (mounted as docker volumes in docker-compose)
 RUN mkdir /var/opt/emoncms
@@ -131,3 +135,8 @@ RUN chown www-data:root /var/opt/emoncms/phptimeseries
 RUN mkdir /var/log/emoncms
 RUN touch /var/log/emoncms/emoncms.log
 RUN chmod 666 /var/log/emoncms/emoncms.log
+
+# To start Apache and emoncms_mqtt from supervisord; from jamesfidell push to the offical emoncms-docker repo
+COPY config/supervisord.conf /etc/supervisor/supervisord.conf
+COPY config/runsupervisord.sh /usr/local/runsupervisord.sh
+ENTRYPOINT [ "bash", "/usr/local/runsupervisord.sh" ]
