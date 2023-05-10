@@ -4,7 +4,7 @@ Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very muc
 
 This image was originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker - if using Unraid definitely start there as a template is provided.
 
-The image assumes you already have the following instances running and properly configured if desired: MySQL or MariaDB (required), Redis (optional but recommended), and MQTT (only required if using devices requiring it).
+The image assumes you already have the following instances running and properly configured if desired: MySQL or MariaDB (required), Redis (optional but recommended to reduce disk writes), and MQTT (only required if using devices requiring it).
 
 # Quick start
 
@@ -24,7 +24,7 @@ The following Enviroment Settings are exposed during creation
 |`REDIS_HOST`| Redis Host | `127.0.0.1` |
 |`REDIS_PORT`| Redis Port | `6379` |
 |`REDIS_PREFIX`| Prefix attached to Redis |`emoncms`|
-|`MQTT_ENABLED`| Enable MQTT Support (required only if using OpenEnergyMonitor devices) |`true`|
+|`MQTT_ENABLED`| Enable MQTT Support (required only if using MQTT devices) |`true`|
 |`MQTT_HOST`| MQTT Host |`localhost`|
 |`MQTT_PORT`| MQTT Port | `1883` |
 |`MQTT_USER`| MQTT Username |`YOUR_MQTT_USER`|
@@ -40,7 +40,7 @@ As well as presenting a build ARG `VERSION`, if set to `master` this will pull t
 
 All modules are grabbed as master source regardless of version due to their slower development pace vs. the main emoncms program.
 
-Two feed volumes are also capable to being set to persistant to survive docker upgrades, link to wherever you need to store data.
+Two feed volumes are also capable to being set to persistant to survive container upgrades, link to wherever you need to store data.
 
 * `/var/opt/emoncms/phpfina/`
 * `/var/opt/emoncms/phptimeseries/`
@@ -51,9 +51,9 @@ Supervisor logs are kept in /var/log/supervisor - logs exist for apache and emon
 
 Versions are tagged to a version number with an internal release number attached (ie `11.3.0-3`) with the `latest` tag tracking the latest stable release. A `master` tag will be produced at the same time tracking the latest source code revisions but this would be a *very* YMMV and should be avoided unless required.
 
-The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml
-
 Primary repository for packages remains at dockerhub as I haven't figured out a way to get Github packages built and pushed cleanly with my workflow as of yet.
+
+The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml
 
 ```bash
 docker pull mvdungern/emoncms:latest
