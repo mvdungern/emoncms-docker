@@ -4,7 +4,7 @@ Docker image for running [Emoncms](https://github.com/emoncms/emoncms). Very muc
 
 This image was originally forked from [mattheworres](https://github.com/mattheworres/emoncms-docker) Unraid docker - if using Unraid definitely start there as a template is provided.
 
-The image assumes you already have the following instances running and properly configured if desired: MySQL or MariaDB (required), Redis (optional but recommended to reduce disk writes), and MQTT (only required if using devices requiring it).
+The image assumes you already have the following instances running and properly configured if desired: MySQL or MariaDB (required), Redis (optional but recommended to in order to reduce disk paging), and MQTT (only required if using devices requiring it).
 
 # Quick start
 
@@ -31,8 +31,8 @@ The following Enviroment Settings are exposed during creation
 |`MQTT_PASSWORD`| MQTT Password |`YOUR_MQTT_PASSWORD`|
 |`MQTT_BASETOPIC`| MQTT Topic |`emon`|
 |`MQTT_CLIENT`| MQTT Client ID | `emoncms` |
-|`MULTI_USER`|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS|`false`|
-|`PASSWORD_RESET`|Allows users to reset their own passwords|`false`|
+|`MULTI_USER`|Enable multiuser in EmonCMS. Set to false after all users have been made if accessable from the internet as no method exists to disable new signups from EmonCMS. This setting is now more or less deprecated as you can add users via the admin user list as of 11.3.21|`false`|
+|`PASSWORD_RESET`|Allows users to reset their own passwords|`true`|
 |`TZ`| Timezone | `America/Toronto` |
 |`LOG_LEVEL`| Sets the logging level with 1=INFO, 2=WARN, 3=ERROR | `2` |
 
@@ -53,7 +53,7 @@ Versions are tagged to a version number with an internal release number attached
 
 Primary repository for packages remains at dockerhub as I haven't figured out a way to get Github packages built and pushed cleanly with my workflow as of yet.
 
-The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml
+The easiest way to spin up an instance is to modify and run the following or the included docker-compose.yml after modifing to fit your install.
 
 ```bash
 docker pull mvdungern/emoncms:latest
@@ -82,7 +82,7 @@ docker run -d \
     -e MQTT_BASETOPIC=emon \
     -e MQTT_CLIENT=emoncms \
     -e MULTI_USER=false \
-    -e PASSWORD_RESET=false \
+    -e PASSWORD_RESET=true \
     -e TZ=YOUR/TIMEZONE \
     -e LOG_LEVEL=2 \
     mvdungern/emoncms
