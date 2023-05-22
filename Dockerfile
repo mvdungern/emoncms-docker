@@ -9,7 +9,7 @@ ARG EXT_REDIS_VERSION=5.3.7
 ARG EXT_MOSQUITTO_VERSION=1.8.0
 
 # Variable for Emoncms domain host, enable for additional security if required 
-ENV EMONCMS_DOMAIN=false
+ENV EMONCMS_DOMAIN='false'
 
 # Set mySQL ENVs
 ENV MYSQL_HOST=127.0.0.1
