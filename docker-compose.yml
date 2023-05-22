@@ -27,7 +27,7 @@ services:
       - MQTT_BASETOPIC=emon 
       - MQTT_CLIENT=emoncms 
       - MULTI_USER=false 
-      - PASSWORD_RESET=false 
+      - PASSWORD_RESET=true 
       - TZ=YOUR/TIMEZONE 
       - LOG_LEVEL=2
     volumes:

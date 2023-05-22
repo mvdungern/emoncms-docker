@@ -39,7 +39,7 @@ ENV MQTT_CLIENT='emoncms'
 
 # Set Emoncms interface option ENVs
 ENV MULTI_USER=false
-ENV PASSWORD_RESET=false
+ENV PASSWORD_RESET=true
 
 #Set Emoncms logging level, usful during debugging
 ENV LOG_LEVEL=2
@@ -52,8 +52,6 @@ RUN apt-get update && apt-get install -y \
               libcurl4-openssl-dev \
               libmosquitto-dev \
               gettext \
-              nano \
-              sysstat \
               git-core \
               supervisor
 
@@ -115,10 +113,10 @@ RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/grap
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app
 RUN git clone https://github.com/emoncms/device.git /var/www/emoncms/Modules/device
 
-# Make the default directory 'safe' for git, cleans up the dubious ownership issue
+# Make the default directory 'safe' for git, cleans up the dubious ownership issue in apache logs
 
-RUN git config --global --add safe.directory /var/www/emoncms
-RUN git config --global --add safe.directory '*'
+# RUN git config --global --add safe.directory /var/www/emoncms
+# RUN git config --global --add safe.directory '*'
 
 # Add custom emoncms config
 COPY config/emoncms.settings.ini /var/www/emoncms/settings.ini
